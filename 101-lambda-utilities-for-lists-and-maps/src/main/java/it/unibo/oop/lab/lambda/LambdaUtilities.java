@@ -2,6 +2,7 @@ package it.unibo.oop.lab.lambda;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -12,9 +13,6 @@ import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import static java.util.Collections.emptyList;
-import static java.util.Collections.emptyMap;
 
 /**
  * This class will contain four utility functions on lists and maps, of which the first one is provided as example.
@@ -64,7 +62,9 @@ public final class LambdaUtilities {
         /*
          * Suggestion: consider Optional.filter
          */
-        return emptyList();
+        final List<Optional<T>> result = new ArrayList<>();
+        list.forEach(t -> result.add(Optional.of(t).filter(pre)));
+        return result;
     }
 
     /**
@@ -83,7 +83,23 @@ public final class LambdaUtilities {
         /*
          * Suggestion: consider Map.merge
          */
-        return emptyMap();
+        final Map<R, Set<T>> result = new HashMap<>();
+        list.forEach(t -> result.merge(op.apply(t), Set.of(t), LambdaUtilities::union));
+        return result;
+    }
+
+    /**
+     * From two {@code Set<T>} it makes one.
+     * 
+     * @param <T> the type of the set
+     * @param set1 the firs set
+     * @param set2 the second set
+     * @return a {@code Set<T>} as sum of the two
+     */
+    public static <T> Set<T> union(final Set<? extends T> set1, final Set<? extends T> set2) {
+        final var unionSet = new HashSet<T>(set1);
+        unionSet.addAll(set2);
+        return unionSet;
     }
 
     /**
@@ -104,7 +120,9 @@ public final class LambdaUtilities {
          *
          * Keep in mind that a map can be iterated through its forEach method
          */
-        return emptyMap();
+        final Map<K, V> result = new HashMap<>();
+        map.forEach((k, v) -> result.put(k, v.orElse(def.get())));
+        return result;
     }
 
     /**
