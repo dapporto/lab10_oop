@@ -118,6 +118,9 @@ public final class DrawNumberViewImpl implements DrawNumberView {
         JOptionPane.showMessageDialog(frame, msg, "Result", JOptionPane.PLAIN_MESSAGE);
     }
 
+    /**
+     * {@inheritDoc} 
+     */
     @Override
     public void displayError(String message) {
         JOptionPane.showMessageDialog(frame, message, "Error", JOptionPane.ERROR_MESSAGE);
